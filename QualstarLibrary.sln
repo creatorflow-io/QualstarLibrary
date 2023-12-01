@@ -1,0 +1,43 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{47753A06-CBB8-49C5-BBCE-3662C12CFAA0}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QualstarLibrary", "src\QualstarLibrary\QualstarLibrary.csproj", "{61F7541C-8636-4272-8710-BCCAFEAD25CC}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{0C19212B-14AC-4189-8F5C-EC86D61D3BDD}"
+	ProjectSection(SolutionItems) = preProject
+		Directory.Build.props = Directory.Build.props
+		README.MD = README.MD
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QualstarLibrary.Startup", "src\QualstarLibrary.Startup\QualstarLibrary.Startup.csproj", "{25FD9750-E2DC-45C1-B38C-1D68F5900200}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{61F7541C-8636-4272-8710-BCCAFEAD25CC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{61F7541C-8636-4272-8710-BCCAFEAD25CC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{61F7541C-8636-4272-8710-BCCAFEAD25CC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{61F7541C-8636-4272-8710-BCCAFEAD25CC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{25FD9750-E2DC-45C1-B38C-1D68F5900200}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{25FD9750-E2DC-45C1-B38C-1D68F5900200}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{25FD9750-E2DC-45C1-B38C-1D68F5900200}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{25FD9750-E2DC-45C1-B38C-1D68F5900200}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{61F7541C-8636-4272-8710-BCCAFEAD25CC} = {47753A06-CBB8-49C5-BBCE-3662C12CFAA0}
+		{25FD9750-E2DC-45C1-B38C-1D68F5900200} = {47753A06-CBB8-49C5-BBCE-3662C12CFAA0}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {4DF5AA8C-297D-4960-AB16-4B7ED5CC8B86}
+	EndGlobalSection
+EndGlobal
