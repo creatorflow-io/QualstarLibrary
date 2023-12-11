@@ -25,7 +25,7 @@ void ConfigureServices(WebApplicationBuilder builder)
 
     if (platform == PlatformID.Win32NT)
     {
-        builder.Services.AddWindowsQualStarLibrary(builder.Configuration.GetSection("HD:Archive:TapeLibrary"));
+        builder.Services.AddWindowsQualStarLibrary(builder.Configuration.GetSection("TapeLibrary"));
         if (isService)
         {
             builder.Host.UseWindowsService();
@@ -33,7 +33,7 @@ void ConfigureServices(WebApplicationBuilder builder)
     }
     else if (platform == PlatformID.Unix)
     {
-        builder.Services.AddLinuxQualStarLibrary(builder.Configuration.GetSection("HD:Archive:TapeLibrary"));
+        builder.Services.AddLinuxQualStarLibrary(builder.Configuration.GetSection("TapeLibrary"));
         if (isService)
         {
             builder.Host.UseSystemd();
@@ -60,7 +60,7 @@ async void ConfigureApp(WebApplication app)
 
     library.MediaChanged += (s, e) =>
     {
-        app.Logger.LogInformation("Media changed: {Drive} {Op}", e.VolumeTag);
+        app.Logger.LogInformation("Media changed: {Drive}", e.VolumeTag);
     };
 
     app.MapGet("/", () => "Welcome to the Library!\nTry /library/help to see how it's work");

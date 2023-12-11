@@ -346,6 +346,7 @@ namespace QualstarLibrary.Services.Linux
 
             if (status == LibraryOperationStatus.LTFS16087E || status == LibraryOperationStatus.LTFS16021E)
             {
+                await WaitAsync(10, token, traceId, "Waiting for {0} seconds before ltfsck");
                 (status, message) = await LtfsckAsync(drive.DeviceName, traceId, token);
                 if (status != LibraryOperationStatus.LTFS16022I)
                 {
