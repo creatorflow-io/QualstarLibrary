@@ -1,7 +1,7 @@
-﻿using Juice.Locks;
+﻿using System.Text.RegularExpressions;
+using Juice.Locks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using System.Text.RegularExpressions;
 
 namespace QualstarLibrary.Services.Windows
 {
@@ -191,6 +191,34 @@ namespace QualstarLibrary.Services.Windows
 
         protected override async Task<(LibraryOperationStatus Status, string? Message)> LtfsUnmountAsync(Drive drive, string traceId, CancellationToken token)
         {
+            var rt = await LtfsCmdEjectAsync(drive, traceId, token);
+            if (rt.Status.IsSuccess())
+            {
+                var unassign = await LtfsUnassignAsync(traceId, drive.MountPoint!);
+                if (unassign.Status != LibraryOperationStatus.Succeeded)
+                {
+                    if (unassign.Status == LibraryOperationStatus.LTFS60233E)
+                    {
+                        Log(traceId, $"Error while unassigning drive {drive.SlotNumber} from {drive.MountPoint} {unassign.Message ?? ""}", LogLevel.Warning);
+                        await WaitAsync(15, token, traceId, "Waiting for {0} seconds before retrying unassign");
+                        unassign = await LtfsUnassignAsync(traceId, drive.MountPoint!);
+                    }
+                    if (unassign.Status != LibraryOperationStatus.Succeeded)
+                    {
+                        return (unassign.Status, $"Error while unassigning drive {drive.SlotNumber} from {drive.MountPoint} {unassign.Message ?? ""}");
+                    }
+                }
+                await UpdateLtfsStatusAsync(traceId, token);
+            }
+            return rt;
+        }
+
+        private async Task<(LibraryOperationStatus Status, string? Message)> LtfsCmdEjectAsync(Drive drive, string traceId, CancellationToken token)
+        {
+            if (drive.Status == LtfsStatus.NO_MEDIA || drive.Status == LtfsStatus.RESET)
+            {
+                return (LibraryOperationStatus.Succeeded, "Already ejected");
+            }
             Log(traceId, $"Unmounting drive {drive.DeviceName}...");
 
             var ltfsUnload = Options.LtfsPath == null ? "LtfsCmdEject" : Path.Combine(Options.LtfsPath, "LtfsCmdEject");
@@ -222,22 +250,6 @@ namespace QualstarLibrary.Services.Windows
             {
                 foundStatus = LibraryOperationStatus.Succeeded;
                 foundMessage = $"The drive {drive.DeviceName} or the tape {drive.LoadedMedia!.VolumeTag} is damaged";
-                //if (foundStatuses.Contains(LibraryOperationStatus.LTFS10004E)
-                //    || foundStatuses.Contains(LibraryOperationStatus.LTFS12012E))
-                //{
-                //    foundStatus = LibraryOperationStatus.Succeeded;
-                //    foundMessage = $"The drive {drive.DeviceName} maybe damaged";
-                //}
-                //else
-                //{
-                //    var (ltfsck, ltfsckMsg) = await LtfsckAsync(drive.DeviceName, traceId, token);
-                //    // Tape damaged, continue to unload the tape
-                //    if (ltfsck.IsEjectable())
-                //    {
-                //        foundStatus = LibraryOperationStatus.Succeeded;
-                //        foundMessage = $"The drive {drive.DeviceName} or the tape {drive.LoadedMedia!.VolumeTag} is damaged";
-                //    }
-                //}
             }
 
             var rt = (foundStatus ??
@@ -305,6 +317,7 @@ namespace QualstarLibrary.Services.Windows
 
                 if (drive.Status == LtfsStatus.LTFS_INCONSISTENT)
                 {
+                    await WaitAsync(10, token, traceId, "Waiting for {0} seconds before ltfsck");
                     var (status, message) = await LtfsckAsync(drive.DeviceName, traceId, token);
                     return (await VerifyLtfsckAsync(drive, status, message, traceId, token)).WaitBeforeNext(TimeSpan.FromSeconds(15));
                 }
@@ -376,20 +389,20 @@ namespace QualstarLibrary.Services.Windows
         }
 
 
-        protected override async Task<LibraryOperation> DoUnmountThenUnloadAsync(Drive drive, string traceId, CancellationToken token)
-        {
-            var rs = await base.DoUnmountThenUnloadAsync(drive, traceId, token);
-            if (rs.Succeeded)
-            {
-                var unassign = await LtfsUnassignAsync(traceId, drive.MountPoint!);
-                if (unassign.Status != LibraryOperationStatus.Succeeded)
-                {
-                    return LibraryOperation.Fail($"Error while unassigning drive {drive.SlotNumber} from {drive.MountPoint} {unassign.Message ?? ""}");
-                }
-                await UpdateLtfsStatusAsync(traceId, token);
-            }
-            return rs;
-        }
+        //protected override async Task<LibraryOperation> DoUnmountThenUnloadAsync(Drive drive, string traceId, CancellationToken token)
+        //{
+        //    var rs = await base.DoUnmountThenUnloadAsync(drive, traceId, token);
+        //    if (rs.Succeeded)
+        //    {
+        //        var unassign = await LtfsUnassignAsync(traceId, drive.MountPoint!);
+        //        if (unassign.Status != LibraryOperationStatus.Succeeded)
+        //        {
+        //            return LibraryOperation.Fail($"Error while unassigning drive {drive.SlotNumber} from {drive.MountPoint} {unassign.Message ?? ""}");
+        //        }
+        //        await UpdateLtfsStatusAsync(traceId, token);
+        //    }
+        //    return rs;
+        //}
         #endregion
     }
 }

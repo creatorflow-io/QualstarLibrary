@@ -35,6 +35,8 @@ namespace QualstarLibrary
                 WriteIndented = true
             };
 
+            var validateMethod = false;
+
             switch (action)
             {
                 case "drives":
@@ -87,7 +89,7 @@ namespace QualstarLibrary
                     }
                 case "format":
                     {
-                        if (!context.Request.Method.Equals("POST", StringComparison.OrdinalIgnoreCase))
+                        if (validateMethod && !context.Request.Method.Equals("POST", StringComparison.OrdinalIgnoreCase))
                         {
                             context.Response.StatusCode = StatusCodes.Status405MethodNotAllowed;
                             await context.Response.WriteAsJsonAsync(new { error = "Invalid request" });
@@ -109,7 +111,7 @@ namespace QualstarLibrary
                     }
                 case "ltfsck":
                     {
-                        if (!context.Request.Method.Equals("POST", StringComparison.OrdinalIgnoreCase))
+                        if (validateMethod && !context.Request.Method.Equals("POST", StringComparison.OrdinalIgnoreCase))
                         {
                             context.Response.StatusCode = StatusCodes.Status405MethodNotAllowed;
                             await context.Response.WriteAsJsonAsync(new { error = "Invalid request" });
@@ -129,7 +131,7 @@ namespace QualstarLibrary
                     }
                 case "load":
                     {
-                        if (!context.Request.Method.Equals("POST", StringComparison.OrdinalIgnoreCase))
+                        if (validateMethod && !context.Request.Method.Equals("POST", StringComparison.OrdinalIgnoreCase))
                         {
                             context.Response.StatusCode = StatusCodes.Status405MethodNotAllowed;
                             await context.Response.WriteAsJsonAsync(new { error = "Invalid request" });
@@ -157,7 +159,7 @@ namespace QualstarLibrary
                     }
                 case "unload":
                     {
-                        if (!context.Request.Method.Equals("POST", StringComparison.OrdinalIgnoreCase))
+                        if (validateMethod && !context.Request.Method.Equals("POST", StringComparison.OrdinalIgnoreCase))
                         {
                             context.Response.StatusCode = StatusCodes.Status405MethodNotAllowed;
                             await context.Response.WriteAsJsonAsync(new { error = "Invalid request" });
@@ -178,7 +180,7 @@ namespace QualstarLibrary
                     }
                 case "mount":
                     {
-                        if (!context.Request.Method.Equals("POST", StringComparison.OrdinalIgnoreCase))
+                        if (validateMethod && !context.Request.Method.Equals("POST", StringComparison.OrdinalIgnoreCase))
                         {
                             context.Response.StatusCode = StatusCodes.Status405MethodNotAllowed;
                             await context.Response.WriteAsJsonAsync(new { error = "Invalid request" });
@@ -199,7 +201,7 @@ namespace QualstarLibrary
                     }
                 case "unmount":
                     {
-                        if (!context.Request.Method.Equals("POST", StringComparison.OrdinalIgnoreCase))
+                        if (validateMethod && !context.Request.Method.Equals("POST", StringComparison.OrdinalIgnoreCase))
                         {
                             context.Response.StatusCode = StatusCodes.Status405MethodNotAllowed;
                             await context.Response.WriteAsJsonAsync(new { error = "Invalid request" });
@@ -220,7 +222,7 @@ namespace QualstarLibrary
                     }
                 case "transfer":
                     {
-                        if (!context.Request.Method.Equals("POST", StringComparison.OrdinalIgnoreCase))
+                        if (validateMethod && !context.Request.Method.Equals("POST", StringComparison.OrdinalIgnoreCase))
                         {
                             context.Response.StatusCode = StatusCodes.Status405MethodNotAllowed;
                             await context.Response.WriteAsJsonAsync(new { error = "Invalid request" });
@@ -252,7 +254,7 @@ namespace QualstarLibrary
                     }
                 case "release":
                     {
-                        if (!context.Request.Method.Equals("POST", StringComparison.OrdinalIgnoreCase))
+                        if (validateMethod && !context.Request.Method.Equals("POST", StringComparison.OrdinalIgnoreCase))
                         {
                             context.Response.StatusCode = StatusCodes.Status405MethodNotAllowed;
                             await context.Response.WriteAsJsonAsync(new { error = "Invalid request" });

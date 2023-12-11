@@ -932,7 +932,7 @@ namespace QualstarLibrary.Services
                     return LibraryOperation.DriveBusy;
                 }
 
-                if (drive.IsFull)
+                if (drive.IsAssigned)
                 {
                     var (status, message) = await LtfsUnmountAsync(drive, traceId, token);
 
@@ -999,7 +999,7 @@ namespace QualstarLibrary.Services
                     return LibraryOperation.DriveNotFound;
                 }
                 // drive is empty
-                if (!drive.IsFull)
+                if (!drive.IsAssigned)
                 {
                     return LibraryOperation.Success;
                 }
@@ -1009,14 +1009,10 @@ namespace QualstarLibrary.Services
                     return LibraryOperation.DriveBusy;
                 }
 
-                if (drive.IsAssigned)
-                {
-                    var (status, message) = await LtfsUnmountAsync(drive, traceId, token);
+                var (status, message) = await LtfsUnmountAsync(drive, traceId, token);
 
-                    return new LibraryOperation(status, message);
-                }
+                return new LibraryOperation(status, message);
 
-                return LibraryOperation.Fail($"Drive {drive.SlotNumber} not assigned to a mount point");
             }
             catch (Exception ex)
             {
