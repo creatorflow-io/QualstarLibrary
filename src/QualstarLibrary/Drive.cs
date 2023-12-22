@@ -69,7 +69,7 @@
 
         public void WriteProtected()
         {
-            LoadedMedia?.WriteProtected();
+            SetStatus(LtfsStatus.LTFS_READ_ONLY);
         }
 
         public void SetSerial(string serial)
@@ -83,6 +83,10 @@
             if (status != LtfsStatus.NO_MEDIA && status != LtfsStatus.RESET)
             {
                 IsReleased = false;
+            }
+            if (status == LtfsStatus.LTFS_READ_ONLY)
+            {
+                LoadedMedia?.WriteProtected();
             }
         }
 

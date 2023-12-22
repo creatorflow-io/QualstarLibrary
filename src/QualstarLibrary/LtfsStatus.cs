@@ -7,7 +7,7 @@
         LTFS_MEDIA,
         LTFS_UNFORMATTED,
         LTFS_INCONSISTENT,
-        WRITE_PROTECTED,
+        LTFS_READ_ONLY,
         MEDIA_NOT_READY
     }
 }
