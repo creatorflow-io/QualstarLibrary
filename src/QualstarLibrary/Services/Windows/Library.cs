@@ -336,7 +336,7 @@ namespace QualstarLibrary.Services.Windows
                     await WaitAsync(5, token, traceId);
                     await UpdateLtfsStatusAsync(traceId, token);
                 }
-
+                
                 return await HandleCommonLtfsStatusAsync(drive, default, $"Drive {drive.SlotNumber} has status {drive.Status}");
             }
             catch (Exception ex)
